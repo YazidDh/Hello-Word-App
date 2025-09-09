@@ -1,0 +1,23 @@
+name: Azure Deploy
+
+# This workflow runs on push to main, or can be triggered by another workflow
+on:
+  workflow_run:
+    workflows: ["Docker Image CI"]  # Name of the build workflow
+    types:
+      - completed
+  # Or trigger manually:
+  # workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
